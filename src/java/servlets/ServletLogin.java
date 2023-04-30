@@ -8,7 +8,6 @@ import clasesPOJO.*;
 import beans.*;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Iterator;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -17,11 +16,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- *
- * @author alber
- */
-@WebServlet(name = "ServletLogin", urlPatterns = { "/ServletLogin" })
+@WebServlet(urlPatterns = { "/ServletLogin" })
 public class ServletLogin extends HttpServlet {
 
     @EJB
@@ -31,12 +26,12 @@ public class ServletLogin extends HttpServlet {
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
      *
-     * @param request  servlet request
+     * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException      if an I/O error occurs
+     * @throws IOException if an I/O error occurs
      */
-   protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
@@ -51,32 +46,45 @@ public class ServletLogin extends HttpServlet {
              // Recogemos los datos del formulario
             String username = request.getParameter("username");
             String password = request.getParameter("password");
-            
-            Alumnos a = new Alumnos(null, "", username, password);
-           
-            if (notasEJB.existeAlumno(a)) {
-                out.println("<h2>Socio numero: " + username + "</h2>");
+            String rol = request.getParameter("rol");
+
+            //Si el usuario es alumno
+            if (rol.equals("alumno")) {
+                //Buscamos el alumno por nombre
+                Alumnos a = new Alumnos(username, password);
+
+            // si objeto a esta vacio
+            if (!notasEJB.existeAlumno(a)) {
+                out.println("<b>El alumno no existe</b><br>");
             } else {
-                out.println("No existe un socio con ese numero.");
-            } 
-            
-            List<Alumnos> l = notasEJB.findAllAlumnos();
-            for(int i=0; i<l.size();i++){
-                out.print("<br><b>ID: </b>" + 
-                        l.get(i).getIdAlumno() + 
-                        ", <b>Nombre: </b>" + 
-                        l.get(i).getNombre() + 
-                        "<b>Usuario: </b>" + 
-                        l.get(i).getNomUser() + "<br>");
+                // Mostramos los datos del alumno
+                a = notasEJB.findAlumnoByName(username);
+                out.println("<b>Nombre: </b>" + a.getNombre() + "<br>");
+                out.println("<b>Usuario: </b>" + a.getNomUser() + "<br>");
+                out.println("<b>Contraseña: </b>" + a.getPassword() + "<br>");
+                out.println("<b>Existe alumno</b><br>");
             }
-            
+            } else {
+                //Buscamos el profesor por nombre
+                Profesores p = new Profesores(username, password);
+
+            // si objeto p esta vacio
+            if (!notasEJB.existeProfesor(p)) {
+                out.println("<b>El profesor no existe</b><br>");
+            } else {
+                // Mostramos los datos del profesor
+                p = notasEJB.findProfesorByName(username);
+                out.println("<b>Nombre: </b>" + p.getNombre() + "<br>");
+                out.println("<b>Usuario: </b>" + p.getNomUser() + "<br>");
+                out.println("<b>Contraseña: </b>" + p.getPassword() + "<br>");
+                out.println("<b>Existe profesor</b><br>");
+            }
+            }
+    
             out.println("</body>");
             out.println("</html>");
         }
     }
-
-     
-            
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the
     // + sign on the left to edit the code.">

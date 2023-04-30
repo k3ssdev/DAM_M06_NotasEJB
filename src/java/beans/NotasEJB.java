@@ -29,11 +29,58 @@ public class NotasEJB {
         return emf.createEntityManager().createNamedQuery("Profesores.findAll").getResultList();
     }
 
-    public boolean existeAlumno(Alumnos a) {
-        EntityManager em = emf.createEntityManager();
-        Alumnos encontrado = em.find(Alumnos.class, a.getNomUser());
-        em.close();
-        return encontrado != null;
-    }
-}
+        public Alumnos findAlumnoByName (String nombre) {
+        Query q = emf.createEntityManager().createNamedQuery("Alumnos.findByNomUser");
+        q.setParameter("nomUser", nombre);
+        List<Alumnos> result = q.getResultList();
+        Iterator iter = result.iterator();
+        Alumnos a = (Alumnos) iter.next();
+        // Si no hay alumno con ese nombre, devuelve  string no encontrado
+        return a;
 
+    }
+
+    public Profesores findProfesorByName (String nombre) {
+        Query q = emf.createEntityManager().createNamedQuery("Profesores.findByNomUser");
+        q.setParameter("nomUser", nombre);
+        List<Profesores> result = q.getResultList();
+        Iterator iter = result.iterator();
+        Profesores a = (Profesores) iter.next();
+        //si no hay profesor con ese nombre, devuelve null
+        return a;
+    }
+        
+    public boolean existeAlumno(Alumnos a) {
+        Query q = emf.createEntityManager().createNamedQuery("Alumnos.findByNomUser");
+        q.setParameter("nomUser", a.getNomUser());
+        List<Alumnos> result = q.getResultList();
+        Iterator iter = result.iterator();
+        if (iter.hasNext()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean existeProfesor(Profesores a) {
+        Query q = emf.createEntityManager().createNamedQuery("Profesores.findByNomUser");
+        q.setParameter("nomUser", a.getNomUser());
+        List<Profesores> result = q.getResultList();
+        Iterator iter = result.iterator();
+        if (iter.hasNext()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    public boolean existeMatricula(Alumnos a) {
+        EntityManager em = emf.createEntityManager();
+        //buscamos el alumno por nombre
+        Alumnos encontrada = em.find(Alumnos.class, a.getNomUser());
+        em.close();
+        return encontrada != null;
+    }
+    
+  
+}
