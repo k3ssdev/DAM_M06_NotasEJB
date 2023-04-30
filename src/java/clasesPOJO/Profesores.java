@@ -69,6 +69,11 @@ public class Profesores implements Serializable {
         this.password = password;
     }
 
+    public Profesores (String nomUser, String password) {
+        this.nomUser = nomUser;
+        this.password = password;
+    }
+
     public Integer getId() {
         return id;
     }

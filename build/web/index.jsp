@@ -10,10 +10,12 @@
 
     <body>
         <div class="container">
-            <h1>Notas Linkia DAM</h1>
+            <h1 id="titulo">Notas Linkia DAM</h1>
+            <br>
             <form action="ServletLogin" method="POST">
                 <h2>Login</h2>
-                <label>Introduce los datos de acceso:</label>
+                <br>
+                <!-- <label>Introduce los datos de acceso:</label> -->
                 <input type="text" name="username" value="" placeholder="Usuario..." />
                 <input type="password" name="password" value="" placeholder="Contraseña..." />
                 <select name="rol">
@@ -21,6 +23,7 @@
                     <option value="profesor">Profesor</option>
                     <option value="admin">Admin</option>
                 </select>
+                <br>
                 <input type="submit" name="enviar" value="Enviar" />
             </form>
         </div>

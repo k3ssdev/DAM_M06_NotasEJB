@@ -7,10 +7,11 @@ body {
 }
 
 .container {
+    margin-top: 5em;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: top;
     height: 100vh;
 }
 
@@ -21,8 +22,15 @@ h2 {
     margin-bottom: 0;
 }
 
+
+h1 {
+    font-size: 30px;
+    color: #4CAF50;
+
+}
+
 form {
-    margin: 0 auto;
+    margin: 10 auto;
     width: 300px;
     display: flex;
     flex-direction: column;
@@ -63,4 +71,19 @@ input[type="submit"] {
 
 input[type="submit"]:hover {
     background-color: #3e8e41;
+}
+
+input[type="submit"]:active {
+    background-color: #3e8e41;
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
+}
+
+select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    margin-bottom: 20px;
 }

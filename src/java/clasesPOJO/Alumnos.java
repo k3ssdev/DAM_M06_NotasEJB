@@ -75,6 +75,11 @@ public class Alumnos implements Serializable {
         this.password = password;
     }
 
+    public Alumnos(String nomUser, String password) {
+        this.nomUser = nomUser;
+        this.password = password;
+    }
+
     public Integer getIdAlumno() {
         return idAlumno;
     }

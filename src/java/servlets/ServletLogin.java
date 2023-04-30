@@ -8,6 +8,7 @@ import clasesPOJO.*;
 import beans.*;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Iterator;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -35,56 +36,46 @@ public class ServletLogin extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException      if an I/O error occurs
      */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+   protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            String usuario;
-            String password;
-            String rol;
-            usuario = request.getParameter("username");
-            password = request.getParameter("password");
-            rol = request.getParameter("rol");
-
-            Boolean validado = false;
-            validado = notasEJB.validarUsuario(usuario, password, rol);
-           
-            List<Alumnos> l = notasEJB.findAllAlumnos();
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ServletActivitat</title>");
+            out.println("<title>Servlet Busqueda por Socio</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Validado: " + validado + "</h1>");
+            out.println("<h1>Resultado de la busqueda</h1>");
+            
+             // Recogemos los datos del formulario
+            String username = request.getParameter("username");
+            String password = request.getParameter("password");
+            
+            Alumnos a = new Alumnos(null, "", username, password);
+           
+            if (notasEJB.existeAlumno(a)) {
+                out.println("<h2>Socio numero: " + username + "</h2>");
+            } else {
+                out.println("No existe un socio con ese numero.");
+            } 
+            
+            List<Alumnos> l = notasEJB.findAllAlumnos();
+            for(int i=0; i<l.size();i++){
+                out.print("<br><b>ID: </b>" + 
+                        l.get(i).getIdAlumno() + 
+                        ", <b>Nombre: </b>" + 
+                        l.get(i).getNombre() + 
+                        "<b>Usuario: </b>" + 
+                        l.get(i).getNomUser() + "<br>");
+            }
+            
             out.println("</body>");
             out.println("</html>");
         }
     }
 
-            //mostar pagina con valor validado
-            
-/* 
-            if (validado) {
-                if (rol.equals("alumno")) {
-                    List<Alumnos> listaAlumnos = notasEJB.findAllAlumnos();
-                    request.setAttribute("listaAlumnos", listaAlumnos);
-                    request.getRequestDispatcher("/alumnos.jsp").forward(request, response);
-                } else if (rol.equals("profesor")) {
-                    List<Profesores> listaProfesores = notasEJB.findAllProfesores();
-                    request.setAttribute("listaProfesores", listaProfesores);
-                    request.getRequestDispatcher("/profesores.jsp").forward(request, response);
-                }
-            } else {
-                request.getRequestDispatcher("/error.jsp").forward(request, response);
-            }
-        } catch (Exception e) {
-            System.out.println("Error en el servlet de login: " + e.getMessage());
-            request.getRequestDispatcher("/error.jsp").forward(request, response);
-        }
-
-    } */
-
+     
             
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the
