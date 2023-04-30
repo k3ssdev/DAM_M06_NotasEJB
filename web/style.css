@@ -2,8 +2,10 @@
 body {
     font-family: Arial, sans-serif;
     background-color: #f2f2f2;
-    margin: 0;
-    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
 .container {
@@ -14,6 +16,35 @@ body {
     justify-content: top;
     height: 100vh;
 }
+
+.content {
+    width: 60%;
+    max-width: 200px;
+    margin: 0 auto;
+    padding: 20px;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 2px solid #ccc;
+    margin-bottom: 1em;
+    table-layout: auto;
+    text-align: center;
+  }
+  
+  th, td {
+    border: 1px solid #ccc;
+    padding: 0.5em;
+    
+  }
+
+  th {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+  
 
 h1,
 h2 {
@@ -78,6 +109,11 @@ input[type="submit"]:active {
     box-shadow: 0 5px #666;
     transform: translateY(4px);
 }
+
+input[type="submit"].red {
+    background-color: red;
+  }
+  
 
 select {
     width: 100%;

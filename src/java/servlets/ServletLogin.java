@@ -26,10 +26,10 @@ public class ServletLogin extends HttpServlet {
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
      *
-     * @param request servlet request
+     * @param request  servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @throws IOException      if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -38,50 +38,99 @@ public class ServletLogin extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet Busqueda por Socio</title>");            
+            out.println("<title>Servlet Busqueda por Socio</title>");
+            out.println("<link rel='stylesheet' href='style.css'>");
             out.println("</head>");
-            out.println("<body>");
+            out.println("<main>");
+
+            out.println("<div class='container'>");
             out.println("<h1>Resultado de la busqueda</h1>");
-            
-             // Recogemos los datos del formulario
+            out.println("<br>");
+            // Recogemos los datos del formulario
             String username = request.getParameter("username");
             String password = request.getParameter("password");
             String rol = request.getParameter("rol");
+            Boolean existe = false;
 
-            //Si el usuario es alumno
+            // Si el usuario es alumno
             if (rol.equals("alumno")) {
-                //Buscamos el alumno por nombre
+                // Buscamos el alumno por nombre
                 Alumnos a = new Alumnos(username, password);
 
-            // si objeto a esta vacio
-            if (!notasEJB.existeAlumno(a)) {
-                out.println("<b>El alumno no existe</b><br>");
+                // si objeto a esta vacio
+                if (!notasEJB.existeAlumno(a)) {
+                    out.println("<b>El alumno no existe</b><br>");
+                } else {
+                    existe = true;
+                    // Mostramos los datos del alumno en una tabla
+                    a = notasEJB.findAlumnoByName(username);
+                    out.println("<table>");
+                    out.println("<tr>");
+                    out.println("<th>Nombre</th>");
+                    out.println("<th>Usuario</th>");
+                    out.println("<th>Contraseña</th>");
+                    out.println("</tr>");
+                    out.println("<tr>");
+                    out.println("<td>" + a.getNombre() + "</td>");
+                    out.println("<td>" + a.getNomUser() + "</td>");
+                    out.println("<td>" + a.getPassword() + "</td>");
+                    out.println("</tr>");
+                    out.println("</table>");
+
+                    // Mostramos las notas del alumno
+                    List<Notas> notas = notasEJB.findNotasByAlumno(a);
+                    out.println("<table>");
+                    out.println("<tr>");
+                    out.println("<th>Asignatura</th>");
+                    out.println("<th>Nota</th>");
+                    out.println("</tr>");
+                    for (Notas n : notas) {
+                        out.println("<tr>");
+                        out.println("<td>" + n.getIdModulo().getNombre() + "</td>");
+                        out.println("<td>" + n.getNotas() + "</td>");
+                        out.println("</tr>");
+                    }
+                    out.println("</table>");
+                    out.println("<br>");
+                }
+
             } else {
-                // Mostramos los datos del alumno
-                a = notasEJB.findAlumnoByName(username);
-                out.println("<b>Nombre: </b>" + a.getNombre() + "<br>");
-                out.println("<b>Usuario: </b>" + a.getNomUser() + "<br>");
-                out.println("<b>Contraseña: </b>" + a.getPassword() + "<br>");
-                out.println("<b>Existe alumno</b><br>");
-            }
-            } else {
-                //Buscamos el profesor por nombre
+                
+                // Buscamos el profesor por nombre
                 Profesores p = new Profesores(username, password);
 
-            // si objeto p esta vacio
-            if (!notasEJB.existeProfesor(p)) {
-                out.println("<b>El profesor no existe</b><br>");
-            } else {
-                // Mostramos los datos del profesor
-                p = notasEJB.findProfesorByName(username);
-                out.println("<b>Nombre: </b>" + p.getNombre() + "<br>");
-                out.println("<b>Usuario: </b>" + p.getNomUser() + "<br>");
-                out.println("<b>Contraseña: </b>" + p.getPassword() + "<br>");
-                out.println("<b>Existe profesor</b><br>");
+                // si objeto p esta vacio
+                if (!notasEJB.existeProfesor(p)) {
+                    out.println("<b>El profesor no existe</b><br>");
+                    existe = false;
+                } else {
+                    // Mostramos los datos del profesor
+                    p = notasEJB.findProfesorByName(username);
+                    out.println("<b>Nombre: </b>" + p.getNombre() + "<br>");
+                    out.println("<b>Usuario: </b>" + p.getNomUser() + "<br>");
+                    out.println("<b>Contraseña: </b>" + p.getPassword() + "<br>");
+                    out.println("<b>Existe profesor</b><br>");
+                }
             }
+
+            // Si usuario no existe, ocultamos el boton de cambiar contraseña
+            if (existe) {
+                // Boton para cambiar la contraseña
+                out.println("<form action='ServletCambiarPassword' method='post' style='all:unset'>");
+                out.println("<input type='submit' value='Cambiar contraseña'>");
+                out.println("<input type='hidden' name='username' value='" + username + "'>");
+                out.println("</form>");
             }
-    
-            out.println("</body>");
+
+            out.println("<br>");
+
+            // Boton para volver al menu
+            out.println("<form action='index.html' method='post' style='all:unset'>");
+            out.println("<input class='red' type='submit' value='Cerrar sesión'>");
+            out.println("</form>");
+
+            out.println("</div>");
+            out.println("</main>");
             out.println("</html>");
         }
     }

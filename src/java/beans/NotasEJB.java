@@ -5,6 +5,7 @@
 package beans;
 
 import clasesPOJO.Alumnos;
+import clasesPOJO.Notas;
 import clasesPOJO.Profesores;
 import java.util.Iterator;
 import java.util.List;
@@ -80,6 +81,16 @@ public class NotasEJB {
         Alumnos encontrada = em.find(Alumnos.class, a.getNomUser());
         em.close();
         return encontrada != null;
+    }
+
+    public List<Notas> findNotasByAlumno(Alumnos a) {
+        EntityManager em = emf.createEntityManager();
+        //buscamos el alumno por nombre
+        Alumnos encontrada = em.find(Alumnos.class, a.getIdAlumno());
+        //recogemos las notas del alumno
+        List<Notas> notas = (List<Notas>) encontrada.getNotasCollection();
+        em.close();
+        return notas;
     }
     
   
