@@ -35,6 +35,14 @@ public class ServletLogin extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
+
+            // Recogemos los datos del formulario
+            String username = request.getParameter("username");
+            String password = request.getParameter("password");
+            String rol = request.getParameter("rol");
+            Boolean existe = false;
+
+            // Mostramos los datos del usuario
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
@@ -44,13 +52,9 @@ public class ServletLogin extends HttpServlet {
             out.println("<main>");
 
             out.println("<div class='container'>");
-            out.println("<h1>Resultado de la busqueda</h1>");
+            out.println("<h1>Menú de " + rol + "</h1>");
             out.println("<br>");
-            // Recogemos los datos del formulario
-            String username = request.getParameter("username");
-            String password = request.getParameter("password");
-            String rol = request.getParameter("rol");
-            Boolean existe = false;
+            
 
             // Si el usuario es alumno
             if (rol.equals("alumno")) {
