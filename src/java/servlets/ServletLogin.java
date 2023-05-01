@@ -142,7 +142,7 @@ public class ServletLogin extends HttpServlet {
                     out.println("<option value='BorrarAlumno'>Borrar</option>");
                     out.println("<option value='ListarModulosPorAlumno'>Módulos</option>");
                     out.println("</select>");
-                    out.println("<input type='submit' value='Enviar' style='background-color: DodgerBlue'>");
+                    out.println("<input type='submit' value='Enviar' class='blue''>");
                     out.println("</form>");
                     out.println("</td>");
                     out.println("<td>");
@@ -154,7 +154,7 @@ public class ServletLogin extends HttpServlet {
                     out.println("<option value='BorrarNota'>Borrar</option>");
                     out.println("<option value='ListarNotasPorAlumno'>Alumnos</option>");
                     out.println("</select>");
-                    out.println("<input type='submit' value='Enviar' style='background-color: DodgerBlue'>");
+                    out.println("<input type='submit' value='Enviar' class='blue''>");
                     out.println("</form>");
                     out.println("</td>");
                     out.println("<td>");
@@ -166,7 +166,7 @@ public class ServletLogin extends HttpServlet {
                     out.println("<option value='BorrarModulo'>Borrar</option>");
                     out.println("<option value='ListarAlumnosPorModulo'>Alumnos</option>");
                     out.println("</select>");
-                    out.println("<input type='submit' value='Enviar' style='background-color: DodgerBlue'>");
+                    out.println("<input type='submit' value='Enviar' class='blue''>");
                     out.println("</form>");
                     out.println("</td>");
                     out.println("<td>");
@@ -177,7 +177,7 @@ public class ServletLogin extends HttpServlet {
                     out.println("<option value='ModificarProfesor'>Modificar</option>");
                     out.println("<option value='BorrarProfesor'>Borrar</option>");
                     out.println("</select>");
-                    out.println("<input type='submit' value='Enviar' style='background-color: DodgerBlue'>");
+                    out.println("<input type='submit' value='Enviar' class='blue''>");
                     out.println("</form>");
                     out.println("</td>");
                     out.println("<td>");
@@ -189,7 +189,7 @@ public class ServletLogin extends HttpServlet {
                     out.println("<option value='BorrarHistorialEvento'>Borrar</option>");
                     out.println("<option value='ListarHistorialPorEvento'>Eventos</option>");
                     out.println("</select>");
-                    out.println("<input type='submit' value='Enviar' style='background-color: DodgerBlue'>");
+                    out.println("<input type='submit' value='Enviar' class='blue''>");
                     out.println("</form>");
                     out.println("</td>");
                     out.println("</tr>");

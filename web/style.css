@@ -100,6 +100,7 @@ input[type="submit"] {
     box-sizing: border-box;
 }
 
+
 input[type="submit"]:hover {
     background-color: #3e8e41;
 }
@@ -113,6 +114,18 @@ input[type="submit"]:active {
 input[type="submit"].red {
     background-color: red;
   }
+
+  input[type="submit"].red:hover {
+    background-color: #8e3e3e;
+  }
+
+  input[type="submit"].blue {
+    background-color: dodgerblue;
+  }
+
+  input[type="submit"].blue:hover {
+    background-color: darkblue;
+  }
   
 
 select {
@@ -123,3 +136,8 @@ select {
     box-sizing: border-box;
     margin-bottom: 20px;
 }
+
+.btn-volver {
+    max-width: 100px;
+}
+
