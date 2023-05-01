@@ -92,6 +92,9 @@ public class NotasEJB {
         em.close();
         return notas;
     }
+
+    public void insertarAlumno(Alumnos a) {
+    }
     
   
 }
