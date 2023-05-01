@@ -53,6 +53,7 @@ public class actionServlet extends HttpServlet {
                 out.println("<title>Listar alumnos</title>");
                 out.println("<link rel='stylesheet' href='style.css'>");
                 out.println("</head>");
+                out.println("<body>");
                 out.println("<main>");
                 
                 out.println("<div class='container'>");
@@ -76,6 +77,20 @@ public class actionServlet extends HttpServlet {
                     }
                     out.println("</table>");
                     out.println("<br>");
+                    
+                    out.println("<input type='submit' value='Volver' onclick=\"history.back()\" class='btn-volver'>");
+
+                    out.println("<script>");
+                    out.println("function goBack() {");
+                    out.println("    window.history.back();");
+                    out.println("}");
+                    out.println("</script>");
+                    out.println("</div>");
+                    out.println("</main>");
+                    out.println("</body>");
+                    out.println("</html>");
+
+
 
                 break;
             
