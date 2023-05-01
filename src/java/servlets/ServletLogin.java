@@ -54,7 +54,6 @@ public class ServletLogin extends HttpServlet {
             out.println("<div class='container'>");
             out.println("<h1>Menú de " + rol + "</h1>");
             out.println("<br>");
-            
 
             // Si el usuario es alumno
             if (rol.equals("alumno")) {
@@ -99,7 +98,7 @@ public class ServletLogin extends HttpServlet {
                 }
 
             } else {
-                
+
                 // Buscamos el profesor por nombre
                 Profesores p = new Profesores(username, password);
 
@@ -108,12 +107,95 @@ public class ServletLogin extends HttpServlet {
                     out.println("<b>El profesor no existe</b><br>");
                     existe = false;
                 } else {
+                    existe = true;
                     // Mostramos los datos del profesor
                     p = notasEJB.findProfesorByName(username);
-                    out.println("<b>Nombre: </b>" + p.getNombre() + "<br>");
-                    out.println("<b>Usuario: </b>" + p.getNomUser() + "<br>");
-                    out.println("<b>Contraseña: </b>" + p.getPassword() + "<br>");
-                    out.println("<b>Existe profesor</b><br>");
+
+                    out.println("<table>");
+                    out.println("<tr>");
+                    out.println("<th>Nombre</th>");
+                    out.println("<th>Usuario</th>");
+                    out.println("<th>Contraseña</th>");
+                    out.println("</tr>");
+                    out.println("<tr>");
+                    out.println("<td>" + p.getNombre() + "</td>");
+                    out.println("<td>" + p.getNomUser() + "</td>");
+                    out.println("<td>" + p.getPassword() + "</td>");
+                    out.println("</tr>");
+                    out.println("</table>");
+
+                    out.println("<table>");
+                    out.println("<tr>");
+                    out.println("<th>Alumnos</th>");
+                    out.println("<th>Notas</th>");
+                    out.println("<th>Módulos</th>");
+                    out.println("<th>Profesores</th>");
+                    out.println("<th>Historial</th>");
+                    out.println("</tr>");
+                    out.println("<tr>");
+                    out.println("<td>");
+                    out.println("<form action='actionServlet' method='post' style='all:unset'>");
+                    out.println("<select name='action'>");
+                    out.println("<option value='ListarAlumnos'>Listar</option>");
+                    out.println("<option value='InsertarAlumno'>Insertar</option>");
+                    out.println("<option value='ModificarAlumno'>Modificar</option>");
+                    out.println("<option value='BorrarAlumno'>Borrar</option>");
+                    out.println("<option value='ListarModulosPorAlumno'>Módulos</option>");
+                    out.println("</select>");
+                    out.println("<input type='submit' value='Enviar' style='background-color: DodgerBlue'>");
+                    out.println("</form>");
+                    out.println("</td>");
+                    out.println("<td>");
+                    out.println("<form action='actionServlet' method='post' style='all:unset'>");
+                    out.println("<select name='action'>");
+                    out.println("<option value='ListarNotas'>Listar</option>");
+                    out.println("<option value='InsertarNota'>Insertar</option>");
+                    out.println("<option value='ModificarNota'>Modificar</option>");
+                    out.println("<option value='BorrarNota'>Borrar</option>");
+                    out.println("<option value='ListarNotasPorAlumno'>Alumnos</option>");
+                    out.println("</select>");
+                    out.println("<input type='submit' value='Enviar' style='background-color: DodgerBlue'>");
+                    out.println("</form>");
+                    out.println("</td>");
+                    out.println("<td>");
+                    out.println("<form action='actionServlet' method='post' style='all:unset'>");
+                    out.println("<select name='action'>");
+                    out.println("<option value='ListarModulos'>Listar</option>");
+                    out.println("<option value='InsertarModulo'>Insertar</option>");
+                    out.println("<option value='ModificarModulo'>Modificar</option>");
+                    out.println("<option value='BorrarModulo'>Borrar</option>");
+                    out.println("<option value='ListarAlumnosPorModulo'>Alumnos</option>");
+                    out.println("</select>");
+                    out.println("<input type='submit' value='Enviar' style='background-color: DodgerBlue'>");
+                    out.println("</form>");
+                    out.println("</td>");
+                    out.println("<td>");
+                    out.println("<form action='actionServlet' method='post' style='all:unset'>");
+                    out.println("<select name='action'>");
+                    out.println("<option value='ListarProfesores'>Listar</option>");
+                    out.println("<option value='InsertarProfesor'>Insertar</option>");
+                    out.println("<option value='ModificarProfesor'>Modificar</option>");
+                    out.println("<option value='BorrarProfesor'>Borrar</option>");
+                    out.println("</select>");
+                    out.println("<input type='submit' value='Enviar' style='background-color: DodgerBlue'>");
+                    out.println("</form>");
+                    out.println("</td>");
+                    out.println("<td>");
+                    out.println("<form action='actionServlet' method='post' style='all:unset'>");
+                    out.println("<select name='action'>");
+                    out.println("<option value='ListarHistorialEventos'>Listar</option>");
+                    out.println("<option value='InsertarHistorialEvento'>Insertar</option>");
+                    out.println("<option value='ModificarHistorialEvento'>Modificar</option>");
+                    out.println("<option value='BorrarHistorialEvento'>Borrar</option>");
+                    out.println("<option value='ListarHistorialPorEvento'>Eventos</option>");
+                    out.println("</select>");
+                    out.println("<input type='submit' value='Enviar' style='background-color: DodgerBlue'>");
+                    out.println("</form>");
+                    out.println("</td>");
+                    out.println("</tr>");
+                    out.println("</table>");
+                    
+
                 }
             }
 
