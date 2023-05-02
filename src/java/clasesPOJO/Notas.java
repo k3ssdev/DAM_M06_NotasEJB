@@ -30,6 +30,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Notas.findAll", query = "SELECT n FROM Notas n"),
     @NamedQuery(name = "Notas.findByIdNotas", query = "SELECT n FROM Notas n WHERE n.idNotas = :idNotas"),
     @NamedQuery(name = "Notas.findByNotas", query = "SELECT n FROM Notas n WHERE n.notas = :notas")})
+    @NamedQuery(name = "Notas.findByModulo", query = "SELECT n FROM Notas n WHERE n.idModulo = :idModulo")
+    
 public class Notas implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -59,6 +61,13 @@ public class Notas implements Serializable {
     public Notas(Integer idNotas, float notas) {
         this.idNotas = idNotas;
         this.notas = notas;
+    }
+
+
+    public Notas(int idAlumno, int idModulo, float Nota) {
+        this.idAlumno = new Alumnos(idAlumno);
+        this.idModulo = new Modulos(idModulo);
+        this.notas = Nota;
     }
 
     public Integer getIdNotas() {

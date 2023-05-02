@@ -15,6 +15,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 @WebServlet(urlPatterns = { "/ServletLogin" })
 public class ServletLogin extends HttpServlet {
@@ -62,9 +63,12 @@ public class ServletLogin extends HttpServlet {
 
                 // si objeto a esta vacio
                 if (!notasEJB.existeAlumno(a)) {
-                    out.println("<b>El alumno no existe</b><br>");
+                    out.println("<b>Usuario/contraseña no válidos</b><br>");
                 } else {
                     existe = true;
+                    HttpSession session = request.getSession();
+                    session.setAttribute("alumno", a);
+
                     // Mostramos los datos del alumno en una tabla
                     a = notasEJB.findAlumnoByName(username);
                     out.println("<table>");
@@ -104,10 +108,12 @@ public class ServletLogin extends HttpServlet {
 
                 // si objeto p esta vacio
                 if (!notasEJB.existeProfesor(p)) {
-                    out.println("<b>El profesor no existe</b><br>");
+                    out.println("<b>Usuario/contraseña no válidos</b><br>");
                     existe = false;
                 } else {
                     existe = true;
+                    HttpSession session = request.getSession();
+                    session.setAttribute("profesor", p);
                     // Mostramos los datos del profesor
                     p = notasEJB.findProfesorByName(username);
 
@@ -143,6 +149,7 @@ public class ServletLogin extends HttpServlet {
                     out.println("<option value='ListarModulosPorAlumno'>Módulos</option>");
                     out.println("</select>");
                     out.println("<input type='submit' value='Enviar' class='blue''>");
+
                     out.println("</form>");
                     out.println("</td>");
                     out.println("<td>");
@@ -194,7 +201,6 @@ public class ServletLogin extends HttpServlet {
                     out.println("</td>");
                     out.println("</tr>");
                     out.println("</table>");
-                    
 
                 }
             }
