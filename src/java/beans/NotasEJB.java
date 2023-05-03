@@ -27,8 +27,8 @@ public class NotasEJB {
         EntityManager em = emf.createEntityManager();
         TypedQuery<Alumnos> q = em.createNamedQuery("Alumnos.findAll", Alumnos.class);
         List<Alumnos> result = q.getResultList();
-        em.flush(); //asegura que se realizó la escritura en la BD
-        em.clear(); //limpia la caché del entity manager
+        em.flush(); // asegura que se realizó la escritura en la BD
+        em.clear(); // limpia la caché del entity manager
         em.close();
         return result;
     }
@@ -37,8 +37,8 @@ public class NotasEJB {
         EntityManager em = emf.createEntityManager();
         TypedQuery<Profesores> q = em.createNamedQuery("Profesores.findAll", Profesores.class);
         List<Profesores> result = q.getResultList();
-        em.flush(); //asegura que se realizó la escritura en la BD
-        em.clear(); //limpia la caché del entity manager
+        em.flush(); // asegura que se realizó la escritura en la BD
+        em.clear(); // limpia la caché del entity manager
         em.close();
         return result;
     }
@@ -73,7 +73,7 @@ public class NotasEJB {
         if (iter.hasNext()) {
             emf.createEntityManager().close();
             return true;
-            
+
         } else {
             emf.createEntityManager().close();
             return false;
@@ -112,6 +112,19 @@ public class NotasEJB {
         return notas;
     }
 
+    public List<Notas> findNotasByAlumnoId(Alumnos a) {
+        EntityManager em = emf.createEntityManager();
+        Alumnos alumno = em.find(Alumnos.class, a.getIdAlumno());
+        Query query = em.createQuery("SELECT n FROM Notas n WHERE n.idAlumno = :alumno");
+        query.setParameter("alumno", alumno);
+        List<Notas> notas = query.getResultList();
+        
+        em.flush(); // asegura que se realizó la escritura en la BD
+        em.clear(); // limpia la caché del entity manager
+        em.close();
+        return notas;
+    }
+
     public boolean insertarAlumno(Alumnos a) {
         // Se crea el entity manager
         EntityManager em = emf.createEntityManager();
@@ -127,8 +140,8 @@ public class NotasEJB {
         // Se guarda el alumno si no existe
         if (!existeAlumno(a)) {
             em.persist(a);
-            em.flush(); //asegura que se realizó la escritura en la BD
-            em.clear(); //limpia la caché del entity manager
+            em.flush(); // asegura que se realizó la escritura en la BD
+            em.clear(); // limpia la caché del entity manager
             em.close();
             return true;
         }
@@ -150,8 +163,8 @@ public class NotasEJB {
         encontrada.setNombre(a.getNombre());
 
         em.merge(encontrada);
-        em.flush(); //asegura que se realizó la escritura en la BD
-        em.clear(); //limpia la caché del entity manager
+        em.flush(); // asegura que se realizó la escritura en la BD
+        em.clear(); // limpia la caché del entity manager
         em.close();
         return true;
 
@@ -167,8 +180,8 @@ public class NotasEJB {
         }
         // si existe, se borra
         em.remove(encontrada);
-        em.flush(); //asegura que se realizó la escritura en la BD
-        em.clear(); //limpia la caché del entity manager
+        em.flush(); // asegura que se realizó la escritura en la BD
+        em.clear(); // limpia la caché del entity manager
         em.close();
         return true;
     }
@@ -176,38 +189,35 @@ public class NotasEJB {
     public List<Notas> findAllNotas() {
         EntityManager em = emf.createEntityManager();
         List<Notas> notas = em.createNamedQuery("Notas.findAll").getResultList();
-        em.flush(); //asegura que se realizó la escritura en la BD
-        em.clear(); //limpia la caché del entity manager
+        em.flush(); // asegura que se realizó la escritura en la BD
+        em.clear(); // limpia la caché del entity manager
         em.close();
         return notas;
-        
 
     }
 
     public List<Modulos> findAllAsignaturas() {
         EntityManager em = emf.createEntityManager();
         List<Modulos> modulos = em.createNamedQuery("Modulos.findAll").getResultList();
-        em.flush(); //asegura que se realizó la escritura en la BD
-        em.clear(); //limpia la caché del entity manager
+        em.flush(); // asegura que se realizó la escritura en la BD
+        em.clear(); // limpia la caché del entity manager
         em.close();
         return modulos;
     }
-
-  
 
     private boolean existeNota(Notas n) {
         EntityManager em = emf.createEntityManager();
         // buscamos el alumno por nombre
         Notas encontrada = em.find(Notas.class, n.getIdNotas());
-        em.flush(); //asegura que se realizó la escritura en la BD
-        em.clear(); //limpia la caché del entity manager
+        em.flush(); // asegura que se realizó la escritura en la BD
+        em.clear(); // limpia la caché del entity manager
         em.close();
         return encontrada != null;
 
     }
 
-    public Boolean insertarNota(Notas n1) { 
-        
+    public Boolean insertarNota(Notas n1) {
+
         EntityManager em = emf.createEntityManager();
         // Se busca el ultimo id de la tabla notas
         TypedQuery<Notas> query = em.createQuery("SELECT n FROM Notas n ORDER BY n.idNotas DESC", Notas.class);
@@ -221,8 +231,8 @@ public class NotasEJB {
         // Se guarda la nota si no existe
         if (!existeNota(n1)) {
             em.persist(n1);
-            em.flush(); //asegura que se realizó la escritura en la BD
-            em.clear(); //limpia la caché del entity manager
+            em.flush(); // asegura que se realizó la escritura en la BD
+            em.clear(); // limpia la caché del entity manager
             em.close();
             return true;
         }
@@ -240,14 +250,14 @@ public class NotasEJB {
         // si existe, se modifica
         encontrada.setNotas(n1.getNotas());
         em.merge(encontrada);
-        em.flush(); //asegura que se realizó la escritura en la BD
-        em.clear(); //limpia la caché del entity manager
+        em.flush(); // asegura que se realizó la escritura en la BD
+        em.clear(); // limpia la caché del entity manager
         em.close();
         return true;
     }
 
     public Boolean borrarNota(Notas n1) {
-        
+
         EntityManager em = emf.createEntityManager();
         // buscamos la nota por id
         Notas encontrada = em.find(Notas.class, n1.getIdNotas());
@@ -257,12 +267,10 @@ public class NotasEJB {
         }
         // si existe, se borra
         em.remove(encontrada);
-        em.flush(); //asegura que se realizó la escritura en la BD
-        em.clear(); //limpia la caché del entity manager
+        em.flush(); // asegura que se realizó la escritura en la BD
+        em.clear(); // limpia la caché del entity manager
         em.close();
         return true;
     }
-
-  
 
 }

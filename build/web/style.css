@@ -141,3 +141,10 @@ select {
     max-width: 100px;
 }
 
+.container2 {
+  display: flex;
+}
+
+.table2 {
+  flex-basis: 50%;
+}

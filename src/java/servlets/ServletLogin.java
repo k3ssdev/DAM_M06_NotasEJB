@@ -85,7 +85,7 @@ public class ServletLogin extends HttpServlet {
                     out.println("</table>");
 
                     // Mostramos las notas del alumno
-                    List<Notas> notas = notasEJB.findNotasByAlumno(a);
+                    List<Notas> notas = notasEJB.findNotasByAlumnoId(a);
                     out.println("<table>");
                     out.println("<tr>");
                     out.println("<th>Asignatura</th>");

@@ -42,6 +42,9 @@ public class actionServlet extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             String action = request.getParameter("action");
             List<Alumnos> alumnos;
+            List<Notas> notas;
+            List<Profesores> profesores;
+            List<Modulos> modulos;
             
             
 
@@ -285,67 +288,76 @@ public class actionServlet extends HttpServlet {
                     out.println("<th>Modulo</th>");
                     out.println("<th>Nota</th>");
                     out.println("</tr>");
-                    alumnos = notasEJB.findAllAlumnos();
-                    for (Alumnos a : alumnos) {
+                    notas = notasEJB.findAllNotas();
+                    for (Notas n : notas) {
                         out.println("<tr>");
-                        // obtener notas del alumno
-                        for (Notas n : a.getNotasCollection()) {
-                            out.println("<td>" + n.getIdNotas() + "</td>");
-                            out.println("<td>" + a.getNombre() + "</td>");
-                            out.println("<td>" + n.getIdModulo().getNombre() + "</td>");
-                            out.println("<td>" + n.getNotas() + "</td>");
-                            out.println("</tr>");
-                        }
+                        out.println("<td>" + n.getIdNotas() + "</td>");
+                        out.println("<td>" + n.getIdAlumno().getNombre() + "</td>");
+                        out.println("<td>" + n.getIdModulo().getNombre() + "</td>");
+                        out.println("<td>" + n.getNotas() + "</td>");
+                        out.println("</tr>");
                     }
                     out.println("</table>");
-                    out.println("<br>");
 
                     break;
 
                 case "InsertarNota":
-
+                    
                     // Código para insertar nota
                     out.println("<h1>Insertar Nota</h1>");
                     out.println("<br>");
-
-                    // imprimir los datos del alumno en una tabla
-                    out.println("<table>");
-                    out.println("<tr>");
-                    out.println("<th>ID Nota</th>");
-                    out.println("<th>Alumno</th>");
-                    out.println("<th>Modulo</th>");
-                    out.println("<th>Nota/th>");
-                    out.println("</tr>");
-                    out.println("<tr>");
-                    alumnos = notasEJB.findAllAlumnos();
-                    for (Alumnos a : alumnos) {
-                        out.println("<tr>");
-                        // obtener notas del alumno
-                        for (Notas n : a.getNotasCollection()) {
-                            out.println("<td>" + n.getIdNotas() + "</td>");
-                            out.println("<td>" + a.getNombre() + "</td>");
-                            out.println("<td>" + n.getIdModulo().getNombre() + "</td>");
-                            out.println("<td>" + n.getNotas() + "</td>");
-                            out.println("</tr>");
-                        }
-                    }
-                    out.println("</tr>");
                     out.println("<form action='actionServlet' method='POST'>");
                     /*
                      * out.println("<label>ID Alumno: </label>");
                      * out.println("<input type='text' name='id' required><br>");
                      */
                     out.println("<label>ID Alumno: </label>");
-                    out.println("<input type='text' name='idAlumno' required><br>");
+                    out.println("<input type='text' name='idAlumno' required>");
                     out.println("<label>ID Modulo: </label>");
-                    out.println("<input type='text' name='idModulo' required><br>");
+                    out.println("<input type='text' name='idModulo' required>");
                     out.println("<label>Nota: </label>");
-                    out.println("<input type='text' name='nota' required><br>");
+                    out.println("<input type='text' name='nota' required>");
                     out.println("<input type='hidden' name='action' value='InsertarNota'>");
                     out.println("<input type='submit' value='Enviar'>");
 
                     out.println("</form>");
-
+                    out.println("<br>");
+                    // imprimir los datos del alumno en una tabla
+                    out.println("<table class='table2'>");
+                    out.println("<tr>");
+                    out.println("<th>ID Nota</th>");
+                    out.println("<th>Alumno</th>");
+                    out.println("<th>Modulo</th>");
+                    out.println("<th>Nota</th>");
+                    out.println("</tr>");
+                    out.println("<tr>");
+                    notas = notasEJB.findAllNotas();
+                    for (Notas n : notas) {
+                        out.println("<tr>");
+                        out.println("<td>" + n.getIdNotas() + "</td>");
+                        out.println("<td>" + n.getIdAlumno().getNombre() + "</td>");
+                        out.println("<td>" + n.getIdModulo().getNombre() + "</td>");
+                        out.println("<td>" + n.getNotas() + "</td>");
+                        out.println("</tr>");
+                    }
+                    out.println("</table>");
+                    out.println("<br>");
+                    
+                    out.println("<table class='table2'>");
+                    out.println("<tr>");
+                    out.println("<th>ID ALumno</th>");
+                    out.println("<th>Nombre Alumno</th>");
+                    out.println("<th>Usuario</th>");
+                    out.println("</tr>");
+                    alumnos = notasEJB.findAllAlumnos();
+                    for (Alumnos a : alumnos) {
+                        out.println("<tr>");
+                        out.println("<td>" + a.getIdAlumno() + "</td>");
+                        out.println("<td>" + a.getNombre() + "</td>");
+                        out.println("<td>" + a.getNomUser() + "</td>");
+                        out.println("</tr>");
+                    }
+                    out.println("</table>");
                     out.println("<br>");
 
                     // Si los campos estan vacios, no se inserta el alumno
@@ -549,7 +561,6 @@ public class actionServlet extends HttpServlet {
                     break;
             }
 
-            out.println("<br>");
             out.println("<input type='submit' value='Volver' onclick=\"history.back()\" class='btn-volver'>");
             out.println("<script>");
             out.println("function goBack() {");
@@ -558,6 +569,7 @@ public class actionServlet extends HttpServlet {
             out.println("</script>");
             out.println("<br>");
             out.println("</div>");
+            out.println("<br>");
             out.println("</main>");
             out.println("</body>");
             out.println("</html>");
