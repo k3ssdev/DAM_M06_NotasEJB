@@ -61,9 +61,6 @@ public class Modulos implements Serializable {
         this.nombre = nombre;
     }
 
-    public Modulos(int parseInt, Object object, Object object2) {
-    }
-
     public Integer getId() {
         return id;
     }

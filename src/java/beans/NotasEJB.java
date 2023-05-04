@@ -5,6 +5,7 @@
 package beans;
 
 import clasesPOJO.Alumnos;
+import clasesPOJO.Historial;
 import clasesPOJO.Modulos;
 import clasesPOJO.Notas;
 import clasesPOJO.Profesores;
@@ -27,9 +28,7 @@ public class NotasEJB {
         EntityManager em = emf.createEntityManager();
         TypedQuery<Alumnos> q = em.createNamedQuery("Alumnos.findAll", Alumnos.class);
         List<Alumnos> result = q.getResultList();
-        em.flush(); // asegura que se realizó la escritura en la BD
-        em.clear(); // limpia la caché del entity manager
-        em.close();
+
         return result;
     }
 
@@ -37,9 +36,7 @@ public class NotasEJB {
         EntityManager em = emf.createEntityManager();
         TypedQuery<Profesores> q = em.createNamedQuery("Profesores.findAll", Profesores.class);
         List<Profesores> result = q.getResultList();
-        em.flush(); // asegura que se realizó la escritura en la BD
-        em.clear(); // limpia la caché del entity manager
-        em.close();
+
         return result;
     }
 
@@ -60,7 +57,6 @@ public class NotasEJB {
         List<Profesores> result = q.getResultList();
         Iterator iter = result.iterator();
         Profesores a = (Profesores) iter.next();
-        emf.createEntityManager().close();
         // si no hay profesor con ese nombre, devuelve null
         return a;
     }
@@ -71,13 +67,40 @@ public class NotasEJB {
         List<Alumnos> result = q.getResultList();
         Iterator iter = result.iterator();
         if (iter.hasNext()) {
-            emf.createEntityManager().close();
             return true;
-
         } else {
-            emf.createEntityManager().close();
             return false;
         }
+    }
+
+    public boolean loginAlumno(Alumnos a) {
+        Query q = emf.createEntityManager().createNamedQuery("Alumnos.findByNomUser");
+        q.setParameter("nomUser", a.getNomUser());
+        List<Alumnos> result = q.getResultList();
+        Iterator iter = result.iterator();
+        if (iter.hasNext()) {
+            Alumnos alumno = (Alumnos) iter.next();
+            if (alumno.getPassword().equals(a.getPassword())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public boolean loginProfesor(Profesores p) {
+        Query q = emf.createEntityManager().createNamedQuery("Profesores.findByNomUser");
+        q.setParameter("nomUser", p.getNomUser());
+        List<Alumnos> result = q.getResultList();
+        Iterator iter = result.iterator();
+        if (iter.hasNext()) {
+            Profesores profesor = (Profesores) iter.next();
+            if (profesor.getPassword().equals(p.getPassword())) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public boolean existeProfesor(Profesores a) {
@@ -86,10 +109,9 @@ public class NotasEJB {
         List<Profesores> result = q.getResultList();
         Iterator iter = result.iterator();
         if (iter.hasNext()) {
-            emf.createEntityManager().close();
+
             return true;
         } else {
-            emf.close();
             return false;
         }
     }
@@ -98,7 +120,7 @@ public class NotasEJB {
         EntityManager em = emf.createEntityManager();
         // buscamos el alumno por nombre
         Alumnos encontrada = em.find(Alumnos.class, a.getNomUser());
-        em.close();
+
         return encontrada != null;
     }
 
@@ -108,7 +130,7 @@ public class NotasEJB {
         Alumnos encontrada = em.find(Alumnos.class, a.getIdAlumno());
         // recogemos las notas del alumno
         List<Notas> notas = (List<Notas>) encontrada.getNotasCollection();
-        em.close();
+
         return notas;
     }
 
@@ -118,10 +140,7 @@ public class NotasEJB {
         Query query = em.createQuery("SELECT n FROM Notas n WHERE n.idAlumno = :alumno");
         query.setParameter("alumno", alumno);
         List<Notas> notas = query.getResultList();
-        
-        em.flush(); // asegura que se realizó la escritura en la BD
-        em.clear(); // limpia la caché del entity manager
-        em.close();
+
         return notas;
     }
 
@@ -140,12 +159,10 @@ public class NotasEJB {
         // Se guarda el alumno si no existe
         if (!existeAlumno(a)) {
             em.persist(a);
-            em.flush(); // asegura que se realizó la escritura en la BD
-            em.clear(); // limpia la caché del entity manager
-            em.close();
+
             return true;
         }
-        em.close();
+
         return false;
     }
 
@@ -163,9 +180,7 @@ public class NotasEJB {
         encontrada.setNombre(a.getNombre());
 
         em.merge(encontrada);
-        em.flush(); // asegura que se realizó la escritura en la BD
-        em.clear(); // limpia la caché del entity manager
-        em.close();
+
         return true;
 
     }
@@ -180,18 +195,14 @@ public class NotasEJB {
         }
         // si existe, se borra
         em.remove(encontrada);
-        em.flush(); // asegura que se realizó la escritura en la BD
-        em.clear(); // limpia la caché del entity manager
-        em.close();
+
         return true;
     }
 
     public List<Notas> findAllNotas() {
         EntityManager em = emf.createEntityManager();
         List<Notas> notas = em.createNamedQuery("Notas.findAll").getResultList();
-        em.flush(); // asegura que se realizó la escritura en la BD
-        em.clear(); // limpia la caché del entity manager
-        em.close();
+
         return notas;
 
     }
@@ -199,9 +210,7 @@ public class NotasEJB {
     public List<Modulos> findAllAsignaturas() {
         EntityManager em = emf.createEntityManager();
         List<Modulos> modulos = em.createNamedQuery("Modulos.findAll").getResultList();
-        em.flush(); // asegura que se realizó la escritura en la BD
-        em.clear(); // limpia la caché del entity manager
-        em.close();
+
         return modulos;
     }
 
@@ -209,9 +218,7 @@ public class NotasEJB {
         EntityManager em = emf.createEntityManager();
         // buscamos el alumno por nombre
         Notas encontrada = em.find(Notas.class, n.getIdNotas());
-        em.flush(); // asegura que se realizó la escritura en la BD
-        em.clear(); // limpia la caché del entity manager
-        em.close();
+
         return encontrada != null;
 
     }
@@ -231,9 +238,7 @@ public class NotasEJB {
         // Se guarda la nota si no existe
         if (!existeNota(n1)) {
             em.persist(n1);
-            em.flush(); // asegura que se realizó la escritura en la BD
-            em.clear(); // limpia la caché del entity manager
-            em.close();
+
             return true;
         }
         return false;
@@ -250,9 +255,7 @@ public class NotasEJB {
         // si existe, se modifica
         encontrada.setNotas(n1.getNotas());
         em.merge(encontrada);
-        em.flush(); // asegura que se realizó la escritura en la BD
-        em.clear(); // limpia la caché del entity manager
-        em.close();
+
         return true;
     }
 
@@ -267,10 +270,159 @@ public class NotasEJB {
         }
         // si existe, se borra
         em.remove(encontrada);
-        em.flush(); // asegura que se realizó la escritura en la BD
-        em.clear(); // limpia la caché del entity manager
-        em.close();
+
         return true;
     }
 
+    public List<Modulos> findAllModulos() {
+        EntityManager em = emf.createEntityManager();
+        List<Modulos> modulos = em.createNamedQuery("Modulos.findAll").getResultList();
+
+        return modulos;
+    }
+
+    public Boolean InsertarModulo(Modulos m) {
+        EntityManager em = emf.createEntityManager();
+        // Se guarda el modulo
+        if (!existeModulo(m)) {
+            em.persist(m);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean existeModulo(Modulos m) {
+        Query q = emf.createEntityManager().createNamedQuery("Modulos.findByNombre");
+        q.setParameter("nombre", m.getNombre());
+        List<Alumnos> result = q.getResultList();
+        Iterator iter = result.iterator();
+        if (iter.hasNext()) {
+            emf.createEntityManager().close();
+            return true;
+
+        } else {
+            emf.createEntityManager().close();
+            return false;
+        }
+    }
+
+    public Boolean ModificarModulo(Modulos m1) {
+        EntityManager em = emf.createEntityManager();
+        // buscamos la nota por id
+        Modulos encontrada = em.find(Modulos.class, m1.getId());
+        // si no existe, devuelve false
+        if (encontrada == null) {
+            return false;
+        }
+        // si existe, se modifica
+        encontrada.setNombre(m1.getNombre());
+        em.merge(encontrada);
+
+        return true;
+    }
+
+    public Boolean borrarModulo(Modulos m1) {
+        EntityManager em = emf.createEntityManager();
+        // buscamos la nota por id
+        Modulos encontrada = em.find(Modulos.class, m1.getId());
+        // si no existe, devuelve false
+        if (encontrada == null) {
+            return false;
+        }
+        // si existe, se borra
+        em.remove(encontrada);
+
+        return true;
+    }
+
+    public Boolean InsertarProfesor(Profesores p) {
+        EntityManager em = emf.createEntityManager();
+        // Se guarda el profesor
+        if (!existeProfesor(p)) {
+            em.persist(p);
+            return true;
+        }
+        return false;
+    }
+
+    public Boolean borrarProfesor(Profesores p1) {
+        EntityManager em = emf.createEntityManager();
+        // buscamos la nota por id
+        Profesores encontrada = em.find(Profesores.class, p1.getId());
+        // si no existe, devuelve false
+        if (encontrada == null) {
+            return false;
+        }
+        // si existe, se borra
+        em.remove(encontrada);
+        return true;
+    }
+
+    public Boolean ModificarProfesor(Profesores p1) {
+        EntityManager em = emf.createEntityManager();
+        // buscamos la nota por id
+        Profesores encontrada = em.find(Profesores.class, p1.getId());
+        // si no existe, devuelve false
+        if (encontrada == null) {
+            return false;
+        }
+        // si existe, se modifica
+        encontrada.setNomUser(p1.getNomUser());
+        encontrada.setPassword(p1.getPassword());
+        encontrada.setNombre(p1.getNombre());
+        em.merge(encontrada);
+        return true;
+    }
+
+    public List<Historial> findAllHistorialEventos() {
+        EntityManager em = emf.createEntityManager();
+        List<Historial> historial = em.createNamedQuery("Historial.findAll").getResultList();
+
+        return historial;
+    }
+
+    // Insertar un evento en el historial
+
+    public Boolean InsertarEvento(Historial h) {
+        EntityManager em = emf.createEntityManager();
+        // Se guarda el evento
+        em.persist(h);
+        return true;
+
+    }
+
+    public List<Historial> findHistorialByTipo(Historial h1) {
+        EntityManager em = emf.createEntityManager();
+        String tipo = h1.getTipo();
+        // buscamos el evento por tipo
+        TypedQuery<Historial> query = em.createQuery("SELECT h FROM Historial h WHERE h.tipo = :tipo", Historial.class);
+        query.setParameter("tipo", tipo);
+        List<Historial> result = query.getResultList();
+
+        // si no existe, devuelve false
+        if (result == null) {
+            return null;
+        }
+        // si existe, se devuelve
+        return result;
+    }
+
+    public List<Notas> findAlumnosByModulo(Modulos m1) {
+
+        EntityManager em = emf.createEntityManager();
+        String modulo = m1.getNombre();
+        // buscamos el evento por tipo
+        TypedQuery<Notas> query = em.createQuery("SELECT n FROM Notas n WHERE n.modulo = :modulo", Notas.class);
+        query.setParameter("modulo", modulo);
+        List<Notas> result = query.getResultList();
+
+        // si no existe, devuelve false
+        if (result == null) {
+            return null;
+        }
+        // si existe, se devuelve
+        return result;
+    }
 }

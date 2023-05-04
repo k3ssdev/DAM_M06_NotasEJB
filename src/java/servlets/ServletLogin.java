@@ -8,6 +8,8 @@ import clasesPOJO.*;
 import beans.*;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -36,6 +38,7 @@ public class ServletLogin extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
+            Timestamp timestamp;
 
             // Recogemos los datos del formulario
             String username = request.getParameter("username");
@@ -47,11 +50,11 @@ public class ServletLogin extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet Busqueda por Socio</title>");
+            out.println("<title>Notas EJB</title>");
             out.println("<link rel='stylesheet' href='style.css'>");
             out.println("</head>");
             out.println("<main>");
-
+            out.println("<body>");
             out.println("<div class='container'>");
             out.println("<h1>Menú de " + rol + "</h1>");
             out.println("<br>");
@@ -60,17 +63,24 @@ public class ServletLogin extends HttpServlet {
             if (rol.equals("alumno")) {
                 // Buscamos el alumno por nombre
                 Alumnos a = new Alumnos(username, password);
+             
 
                 // si objeto a esta vacio
-                if (!notasEJB.existeAlumno(a)) {
+                if (!notasEJB.loginAlumno(a)) {
                     out.println("<b>Usuario/contraseña no válidos</b><br>");
                 } else {
+                    a = notasEJB.findAlumnoByName(username);
                     existe = true;
                     HttpSession session = request.getSession();
                     session.setAttribute("alumno", a);
+                    // Creamos un objeto Historial y lo insertamos en la base de datos
+                    // timestamp to string
+                    timestamp = new Timestamp(System.currentTimeMillis());
+                    Historial h = new Historial("A", a.getIdAlumno(), timestamp.toString());
+                    notasEJB.InsertarEvento(h);
 
                     // Mostramos los datos del alumno en una tabla
-                    a = notasEJB.findAlumnoByName(username);
+
                     out.println("<table>");
                     out.println("<tr>");
                     out.println("<th>Nombre</th>");
@@ -107,15 +117,22 @@ public class ServletLogin extends HttpServlet {
                 Profesores p = new Profesores(username, password);
 
                 // si objeto p esta vacio
-                if (!notasEJB.existeProfesor(p)) {
+                if (!notasEJB.loginProfesor(p)) {
                     out.println("<b>Usuario/contraseña no válidos</b><br>");
                     existe = false;
                 } else {
                     existe = true;
-                    HttpSession session = request.getSession();
-                    session.setAttribute("profesor", p);
+
                     // Mostramos los datos del profesor
                     p = notasEJB.findProfesorByName(username);
+
+                    // guardamos los datos del profesor en la sesion
+                    HttpSession session = request.getSession();
+                    session.setAttribute("profesor", p);
+                    // Creamos un objeto Historial y lo insertamos en la base de datos
+                    timestamp = new Timestamp(System.currentTimeMillis());
+                    Historial h = new Historial("P", p.getId(), timestamp.toString());
+                    notasEJB.InsertarEvento(h);
 
                     out.println("<table>");
                     out.println("<tr>");
@@ -191,9 +208,6 @@ public class ServletLogin extends HttpServlet {
                     out.println("<form action='actionServlet' method='post' style='all:unset'>");
                     out.println("<select name='action'>");
                     out.println("<option value='ListarHistorialEventos'>Listar</option>");
-                    out.println("<option value='InsertarHistorialEvento'>Insertar</option>");
-                    out.println("<option value='ModificarHistorialEvento'>Modificar</option>");
-                    out.println("<option value='BorrarHistorialEvento'>Borrar</option>");
                     out.println("<option value='ListarHistorialPorEvento'>Eventos</option>");
                     out.println("</select>");
                     out.println("<input type='submit' value='Enviar' class='blue''>");
@@ -217,12 +231,18 @@ public class ServletLogin extends HttpServlet {
             out.println("<br>");
 
             // Boton para volver al menu
-            out.println("<form action='index.html' method='post' style='all:unset'>");
+            out.println("<form action='/NotasEJB' method='post' style='all:unset'>");
             out.println("<input class='red' type='submit' value='Cerrar sesión'>");
             out.println("</form>");
 
             out.println("</div>");
+
+            out.println("</body>");
             out.println("</main>");
+            out.println("<footer>");
+            out.println("<p>2023 DAM M06 - Alberto Pérez</p>");
+            out.println("</footer>");
+
             out.println("</html>");
         }
     }

@@ -61,8 +61,18 @@ public class Historial implements Serializable {
         this.id = id;
     }
 
+    public Historial(String tipo) {
+        this.tipo = tipo;
+    }
+
     public Historial(Integer id, String tipo, int user, String detalle) {
         this.id = id;
+        this.tipo = tipo;
+        this.user = user;
+        this.detalle = detalle;
+    }
+
+    public Historial(String tipo, int user, String detalle) {
         this.tipo = tipo;
         this.user = user;
         this.detalle = detalle;
